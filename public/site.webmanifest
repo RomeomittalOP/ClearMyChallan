@@ -1,0 +1,21 @@
+{
+  "name": "ClearMyChallan — Vehicle Challan Resolution",
+  "short_name": "ClearMyChallan",
+  "description": "Advocate-assisted vehicle challan resolution starting at 60% of the original fine. Encrypted, refund-backed, 100% online.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1D4ED8",
+  "lang": "en-IN",
+  "categories": ["legal", "finance", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}

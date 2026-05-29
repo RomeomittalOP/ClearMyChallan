@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Open Graph / Twitter share image for ClearMyChallan.
+  Dimensions follow the 1200x630 social standard.
+
+  NOTE FOR PRODUCTION:
+  Facebook and LinkedIn don't reliably render SVG OG images. Before going live,
+  export this artwork to /public/og-image.png (1200x630) and update the
+  og:image / twitter:image meta tags in index.html accordingly. Twitter and
+  WhatsApp render this SVG fine as-is.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="ClearMyChallan — advocate-assisted vehicle challan resolution from 60% of the original fine">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EEF4FF"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1D4ED8"/>
+      <stop offset="100%" stop-color="#1B3370"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="rgba(29,78,216,0.06)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Logo + brand -->
+  <g transform="translate(80,80)">
+    <rect width="56" height="56" rx="14" fill="url(#brand)"/>
+    <path d="M16 30 L24 38 L40 22" stroke="#FFFFFF" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="76" y="38" font-family="Plus Jakarta Sans, Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#0B1B3F">ClearMy<tspan fill="#1D4ED8">Challan</tspan></text>
+  </g>
+
+  <!-- Headline -->
+  <text x="80" y="260" font-family="Plus Jakarta Sans, Inter, Arial, sans-serif" font-size="64" font-weight="800" fill="#0B1B3F">
+    <tspan x="80" dy="0">Resolve vehicle challans</tspan>
+    <tspan x="80" dy="76">from <tspan fill="#1D4ED8">60% of the fine.</tspan></tspan>
+  </text>
+
+  <!-- Subline -->
+  <text x="80" y="450" font-family="Inter, Arial, sans-serif" font-size="26" fill="#475569">
+    Advocate-assisted · Disposed in 20–25 days · 100% refund if not resolved
+  </text>
+
+  <!-- Chips -->
+  <g font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600">
+    <g transform="translate(80,510)">
+      <rect width="220" height="56" rx="28" fill="#FFFFFF" stroke="#DCE7FF"/>
+      <circle cx="32" cy="28" r="8" fill="#16A34A"/>
+      <text x="56" y="35" fill="#0B1B3F">Encrypted &amp; Secure</text>
+    </g>
+    <g transform="translate(320,510)">
+      <rect width="240" height="56" rx="28" fill="#FFFFFF" stroke="#DCE7FF"/>
+      <circle cx="32" cy="28" r="8" fill="#16A34A"/>
+      <text x="56" y="35" fill="#0B1B3F">Advocate Assisted</text>
+    </g>
+    <g transform="translate(580,510)">
+      <rect width="220" height="56" rx="28" fill="#FFFFFF" stroke="#DCE7FF"/>
+      <circle cx="32" cy="28" r="8" fill="#16A34A"/>
+      <text x="56" y="35" fill="#0B1B3F">Refund Guarantee</text>
+    </g>
+  </g>
+
+  <!-- Right side: city pill cloud -->
+  <g font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="#1D4ED8">
+    <rect x="800" y="160" width="320" height="280" rx="24" fill="#FFFFFF" stroke="#DCE7FF"/>
+    <text x="824" y="200" font-size="14" letter-spacing="2" fill="#475569">CITIES COVERED</text>
+    <g transform="translate(824,224)">
+      <g transform="translate(0,0)"><rect width="92" height="34" rx="17" fill="#EEF4FF"/><text x="46" y="22" text-anchor="middle">Delhi</text></g>
+      <g transform="translate(100,0)"><rect width="98" height="34" rx="17" fill="#EEF4FF"/><text x="49" y="22" text-anchor="middle">Noida</text></g>
+      <g transform="translate(206,0)"><rect width="110" height="34" rx="17" fill="#EEF4FF"/><text x="55" y="22" text-anchor="middle">Gurugram</text></g>
+      <g transform="translate(0,46)"><rect width="120" height="34" rx="17" fill="#EEF4FF"/><text x="60" y="22" text-anchor="middle">Ghaziabad</text></g>
+      <g transform="translate(128,46)"><rect width="120" height="34" rx="17" fill="#EEF4FF"/><text x="60" y="22" text-anchor="middle">Faridabad</text></g>
+      <g transform="translate(0,92)"><rect width="100" height="34" rx="17" fill="#EEF4FF"/><text x="50" y="22" text-anchor="middle">Lucknow</text></g>
+      <g transform="translate(108,92)"><rect width="100" height="34" rx="17" fill="#EEF4FF"/><text x="50" y="22" text-anchor="middle">Kanpur</text></g>
+      <g transform="translate(216,92)"><rect width="92" height="34" rx="17" fill="#EEF4FF"/><text x="46" y="22" text-anchor="middle">Agra</text></g>
+      <g transform="translate(0,138)"><rect width="110" height="34" rx="17" fill="#EEF4FF"/><text x="55" y="22" text-anchor="middle">Mathura</text></g>
+      <g transform="translate(118,138)"><rect width="106" height="34" rx="17" fill="#EEF4FF"/><text x="53" y="22" text-anchor="middle">Aligarh</text></g>
+      <g transform="translate(232,138)"><rect width="84" height="34" rx="17" fill="#EEF4FF"/><text x="42" y="22" text-anchor="middle">Meerut</text></g>
+    </g>
+  </g>
+
+  <!-- Footer / URL -->
+  <text x="80" y="595" font-family="Inter, Arial, sans-serif" font-size="20" fill="#64748B">clearmychallan.in</text>
+</svg>
