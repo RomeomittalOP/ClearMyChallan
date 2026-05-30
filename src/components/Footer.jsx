@@ -56,10 +56,10 @@ export default function Footer() {
             <FooterCol
               title="Legal"
               links={[
-                ['Privacy Policy', '#'],
-                ['Terms of Service', '#'],
-                ['Refund Policy', '#'],
-                ['Disclaimer', '#']
+                ['Privacy Policy', '#privacy'],
+                ['Terms of Service', '#terms'],
+                ['Refund Policy', '#refund'],
+                ['Disclaimer', '#disclaimer']
               ]}
             />
           </div>

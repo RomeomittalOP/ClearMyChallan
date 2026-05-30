@@ -14,6 +14,7 @@ import DataSafety from './components/DataSafety.jsx'
 import Testimonials from './components/Testimonials.jsx'
 import FAQ from './components/FAQ.jsx'
 import AdvocateContact from './components/AdvocateContact.jsx'
+import Legal from './components/Legal.jsx'
 import Footer from './components/Footer.jsx'
 import FloatingSupport from './components/FloatingSupport.jsx'
 import BackgroundOrbs from './components/ui/BackgroundOrbs.jsx'
@@ -46,6 +47,7 @@ export default function App() {
           <Testimonials />
           <FAQ />
           <AdvocateContact />
+          <Legal />
         </main>
         <Footer />
         <FloatingSupport />

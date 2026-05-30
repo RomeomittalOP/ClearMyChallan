@@ -40,6 +40,24 @@ const config = {
     webhookSecret: required('RAZORPAY_WEBHOOK_SECRET', '')
   },
 
+  cloudinary: {
+    cloudName: required('CLOUDINARY_CLOUD_NAME', ''),
+    apiKey: required('CLOUDINARY_API_KEY', ''),
+    apiSecret: required('CLOUDINARY_API_SECRET', ''),
+    folder: required('CLOUDINARY_UPLOAD_FOLDER', 'clearmychallan/cases')
+  },
+
+  upload: {
+    maxBytes: parseInt(required('MAX_UPLOAD_BYTES', '20971520'), 10),
+    allowedMimes: required(
+      'ALLOWED_UPLOAD_MIMES',
+      'image/jpeg,image/png,image/jpg,application/pdf'
+    )
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  },
+
   rateLimit: {
     windowMs: parseInt(required('RATE_LIMIT_WINDOW_MS', '900000'), 10),
     max: parseInt(required('RATE_LIMIT_MAX', '300'), 10)
