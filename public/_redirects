@@ -1,0 +1,3 @@
+# Netlify / Cloudflare Pages SPA fallback.
+# All client-side routes (/track, /admin/*, etc.) fall back to index.html.
+/*    /index.html   200

@@ -72,7 +72,7 @@ export default function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
-                placeholder="admin@clearmychallan.in"
+                placeholder="admin@clearmychallan.co.in"
                 className="w-full pl-11 pr-4 py-3 bg-transparent outline-none text-navy placeholder:text-ink-400/60"
                 autoComplete="email"
               />

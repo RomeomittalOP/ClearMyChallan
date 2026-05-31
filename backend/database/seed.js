@@ -35,7 +35,7 @@ async function run() {
   }
 
   // A demo user for end-to-end testing.
-  const demoEmail = 'demo@clearmychallan.in'
+  const demoEmail = 'demo@clearmychallan.co.in'
   const demo = await User.findOne({ email: demoEmail })
   if (!demo) {
     const u = new User({
@@ -50,7 +50,7 @@ async function run() {
   }
 
   // A demo advocate for the assignment workflow.
-  const advEmail = 'advocate@clearmychallan.in'
+  const advEmail = 'advocate@clearmychallan.co.in'
   const adv = await User.findOne({ email: advEmail })
   if (!adv) {
     const a = new User({

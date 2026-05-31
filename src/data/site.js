@@ -19,7 +19,7 @@ export const SITE = {
   whatsapp: WHATSAPP, // 918000727771
   whatsappHref: (msg = 'Hi, I need help resolving a vehicle challan.') =>
     `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,
-  email: 'help@clearmychallan.in',
+  email: 'help@clearmychallan.co.in',
 
   // Offer / policy
   startingPercent: 60, // "as low as 60% of the original fine"

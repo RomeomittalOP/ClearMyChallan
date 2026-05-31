@@ -19,4 +19,4 @@ Disallow: /*?token=
 Crawl-delay: 1
 
 # Sitemap
-Sitemap: https://clearmychallan.in/sitemap.xml
+Sitemap: https://www.clearmychallan.co.in/sitemap.xml

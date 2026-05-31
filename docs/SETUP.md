@@ -93,7 +93,7 @@ npm run dev                # http://localhost:5173
 cd backend
 npm run seed
 # → admin: ADMIN_EMAIL / ADMIN_PASSWORD (from .env)
-# → demo:  demo@clearmychallan.in / Demo@1234
+# → demo:  demo@clearmychallan.co.in / Demo@1234
 ```
 
 ---

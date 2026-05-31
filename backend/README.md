@@ -23,8 +23,8 @@ Health check: `GET http://localhost:4000/api/health`
 ### Seeded accounts (after `npm run seed`)
 | Role | Email | Password |
 | --- | --- | --- |
-| User | `demo@clearmychallan.in` | `Demo@1234` |
-| Advocate | `advocate@clearmychallan.in` | `Advocate@1234` |
+| User | `demo@clearmychallan.co.in` | `Demo@1234` |
+| Advocate | `advocate@clearmychallan.co.in` | `Advocate@1234` |
 | Admin | `ADMIN_EMAIL` (from `.env`) | `ADMIN_PASSWORD` |
 
 ---
