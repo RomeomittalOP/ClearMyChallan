@@ -69,7 +69,7 @@ cp .env.example .env.local
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_API_BASE_URL` | URL the browser will call (e.g. `http://localhost:4000/api`) |
+| `VITE_API_BASE_URL` | URL the browser will call (e.g. `https://api.clearmychallan.co.in/api`) |
 | `VITE_RAZORPAY_KEY_ID` | Optional — pre-load Razorpay key. The frontend can also fetch it from `/api/payments/config`. |
 | `VITE_BRAND_NAME` | Brand name shown on Razorpay Checkout |
 | `VITE_SUPPORT_PHONE` / `VITE_WHATSAPP_NUMBER` | Click-to-call / chat numbers in the UI |
@@ -102,13 +102,13 @@ npm run seed
 
 ### 5.1 Backend health
 ```bash
-curl http://localhost:4000/api/health
+curl https://api.clearmychallan.co.in/api/health
 # → {"success":true,"message":"ok","uptime":...}
 ```
 
 ### 5.2 Challan lookup (no auth)
 ```bash
-curl -X POST http://localhost:4000/api/challans/lookup \
+curl -X POST https://api.clearmychallan.co.in/api/challans/lookup \
   -H "Content-Type: application/json" \
   -d '{"vehicleNumber":"DL10CA1234"}'
 ```
@@ -116,12 +116,12 @@ curl -X POST http://localhost:4000/api/challans/lookup \
 ### 5.3 Signup → auth → resolve
 ```bash
 # Signup
-curl -X POST http://localhost:4000/api/auth/signup \
+curl -X POST https://api.clearmychallan.co.in/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{"name":"Test","email":"t@t.com","password":"Test@1234"}'
 
 # Use the returned token in subsequent calls:
-curl http://localhost:4000/api/auth/me \
+curl https://api.clearmychallan.co.in/api/auth/me \
   -H "Authorization: Bearer <token>"
 ```
 

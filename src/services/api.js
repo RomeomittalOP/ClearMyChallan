@@ -12,7 +12,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 
 const BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api'
+  import.meta.env.VITE_API_BASE_URL || 'https://api.clearmychallan.co.in/api'
 
 // ---- Token storage --------------------------------------------------
 // We use localStorage for now. To upgrade to httpOnly cookies later,
