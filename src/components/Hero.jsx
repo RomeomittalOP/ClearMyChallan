@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
@@ -7,7 +8,8 @@ import {
   Clock,
   RotateCcw,
   CheckCircle2,
-  Lock
+  Lock,
+  Upload
 } from 'lucide-react'
 import { SITE } from '../data/site.js'
 import { trustBadges } from '../data/content.js'
@@ -37,8 +39,8 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.05 }}
               className="font-display text-4xl sm:text-5xl lg:text-[56px] leading-[1.08] font-extrabold tracking-tight text-navy"
             >
-              Resolve your vehicle challans at prices as low as{' '}
-              <span className="text-police-600">60% of the original fine.</span>
+              Our advocate will contact you within{' '}
+              <span className="text-police-600">24 hours.</span>
             </motion.h1>
 
             <motion.p
@@ -47,10 +49,11 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.12 }}
               className="mt-5 text-base sm:text-lg text-ink-500 max-w-2xl leading-relaxed"
             >
-              Licensed advocates handle the entire process — no court visits, no
-              agents. Transparent city-based pricing, disposal in{' '}
+              Upload your RC and Challan documents, share your contact details — a
+              licensed advocate reviews each case manually and quotes a transparent
+              price. Disposal in{' '}
               <span className="font-semibold text-ink-700">{SITE.disposalTime}</span>,
-              and a full refund if it isn&apos;t resolved in time.
+              or full refund.
             </motion.p>
 
             <motion.div
@@ -59,13 +62,18 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mt-7 flex flex-wrap items-center gap-3"
             >
-              <button onClick={() => go('search')} className="btn-primary group">
-                Check Your Challan
+              <button onClick={() => go('submit')} className="btn-primary group">
+                <Upload className="w-4 h-4" />
+                Submit Documents
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </button>
+              <Link to="/track" className="btn-secondary">
+                <Clock className="w-4 h-4" />
+                Track My Case
+              </Link>
               <a href={SITE.telHref} className="btn-secondary">
                 <Phone className="w-4 h-4" />
-                Talk to an Advocate
+                {SITE.phoneDisplay}
               </a>
             </motion.div>
 
@@ -100,7 +108,20 @@ export default function Hero() {
                 </span>
               </div>
 
-              <div className="mt-5 grid gap-3">
+              {/* Prominent 24-hour callout */}
+              <div className="mt-5 rounded-xl bg-police-600 p-5 text-white">
+                <div className="flex items-center gap-2.5 text-police-100 text-xs uppercase tracking-wider font-semibold">
+                  <Clock className="w-4 h-4" /> Advocate response
+                </div>
+                <div className="mt-2 font-display text-2xl sm:text-3xl font-extrabold">
+                  Within 24 hours
+                </div>
+                <p className="text-sm text-police-100 mt-1">
+                  Real human review of every uploaded case.
+                </p>
+              </div>
+
+              <div className="mt-4 grid gap-3">
                 {[
                   {
                     icon: Clock,
@@ -134,19 +155,6 @@ export default function Hero() {
                     </div>
                   )
                 })}
-              </div>
-
-              <div className="mt-5 rounded-xl bg-police-600 p-4 text-white flex items-center justify-between">
-                <div>
-                  <div className="text-xs text-police-100">Starting from</div>
-                  <div className="font-display text-2xl font-bold">60% of fine</div>
-                </div>
-                <button
-                  onClick={() => go('pricing')}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold bg-white/15 hover:bg-white/25 transition-colors px-3.5 py-2 rounded-lg"
-                >
-                  View pricing <ArrowRight className="w-4 h-4" />
-                </button>
               </div>
             </motion.div>
           </div>

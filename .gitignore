@@ -1,5 +1,27 @@
-node_modules/
+# Build artifacts
 dist/
-backend/
+
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Secrets (NEVER commit these)
 .env
 .env.local
+.env.*.local
+backend/.env
+backend/.env.local
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Editor swap files
+*.swp
+*.swo

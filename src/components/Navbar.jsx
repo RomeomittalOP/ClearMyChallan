@@ -1,13 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShieldCheck, Menu, X, Phone } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {
+  ShieldCheck,
+  Menu,
+  X,
+  Phone,
+  Upload,
+  Clock,
+  LogIn,
+  LayoutDashboard
+} from 'lucide-react'
 import { navLinks } from '../data/content.js'
 import { SITE } from '../data/site.js'
+import { useAuth } from '../context/AuthContext.jsx'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('home')
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const isHome = location.pathname === '/'
+  const isAdminUser = user && (user.role === 'admin' || user.role === 'advocate')
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -17,6 +33,7 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
+    if (!isHome) return
     const observers = []
     navLinks.forEach((l) => {
       const el = document.getElementById(l.id)
@@ -30,11 +47,20 @@ export default function Navbar() {
       observers.push(obs)
     })
     return () => observers.forEach((o) => o.disconnect())
-  }, [])
+  }, [isHome])
 
-  const go = (id) => {
+  // Navigate to a section: if on home, smooth-scroll; else go to /#id.
+  const goSection = (id) => {
     setOpen(false)
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (isHome) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    } else {
+      navigate(`/#${id}`)
+      // Defer scroll so the home route has time to mount.
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 80)
+    }
   }
 
   return (
@@ -49,28 +75,28 @@ export default function Navbar() {
       }`}
     >
       <nav className="section-pad flex items-center justify-between h-16 md:h-[72px]">
-        <button onClick={() => go('home')} className="flex items-center gap-2.5" aria-label="ClearMyChallan home">
+        <Link to="/" className="flex items-center gap-2.5" aria-label="ClearMyChallan home">
           <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-police-600 shadow-soft">
             <ShieldCheck className="w-5 h-5 text-white" />
           </span>
           <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-navy">
             ClearMy<span className="text-police-600">Challan</span>
           </span>
-        </button>
+        </Link>
 
         {/* Desktop nav */}
         <ul className="hidden lg:flex items-center gap-1">
           {navLinks.map((l) => (
             <li key={l.id}>
               <button
-                onClick={() => go(l.id)}
+                onClick={() => goSection(l.id)}
                 className={`relative px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  active === l.id
+                  isHome && active === l.id
                     ? 'text-police-700'
                     : 'text-ink-500 hover:text-police-700'
                 }`}
               >
-                {active === l.id && (
+                {isHome && active === l.id && (
                   <motion.span
                     layoutId="nav-underline"
                     className="absolute left-3.5 right-3.5 -bottom-0.5 h-0.5 rounded-full bg-police-600"
@@ -81,15 +107,33 @@ export default function Navbar() {
               </button>
             </li>
           ))}
+          <li>
+            <Link
+              to="/track"
+              className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${
+                location.pathname === '/track'
+                  ? 'text-police-700'
+                  : 'text-ink-500 hover:text-police-700'
+              }`}
+            >
+              Track Case
+            </Link>
+          </li>
         </ul>
 
         <div className="hidden lg:flex items-center gap-3">
+          {isAdminUser && (
+            <Link to="/admin" className="btn-secondary !px-3.5 !py-2.5 text-sm">
+              <LayoutDashboard className="w-4 h-4" /> Dashboard
+            </Link>
+          )}
           <a href={SITE.telHref} className="btn-secondary !px-4 !py-2.5 text-sm">
             <Phone className="w-4 h-4" />
             {SITE.phoneDisplay}
           </a>
-          <button onClick={() => go('search')} className="btn-primary !px-5 !py-2.5 text-sm">
-            Check Challan
+          <button onClick={() => goSection('submit')} className="btn-primary !px-5 !py-2.5 text-sm">
+            <Upload className="w-4 h-4" />
+            Submit Documents
           </button>
         </div>
 
@@ -114,9 +158,9 @@ export default function Navbar() {
               {navLinks.map((l) => (
                 <li key={l.id}>
                   <button
-                    onClick={() => go(l.id)}
+                    onClick={() => goSection(l.id)}
                     className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium ${
-                      active === l.id
+                      isHome && active === l.id
                         ? 'bg-police-50 text-police-700'
                         : 'text-ink-500 hover:bg-surface-soft'
                     }`}
@@ -125,12 +169,38 @@ export default function Navbar() {
                   </button>
                 </li>
               ))}
+              <li>
+                <Link
+                  to="/track"
+                  onClick={() => setOpen(false)}
+                  className="w-full inline-flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium text-ink-500 hover:bg-surface-soft"
+                >
+                  <Clock className="w-4 h-4" /> Track Case
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={isAdminUser ? '/admin' : '/admin/login'}
+                  onClick={() => setOpen(false)}
+                  className="w-full inline-flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium text-ink-500 hover:bg-surface-soft"
+                >
+                  {isAdminUser ? (
+                    <>
+                      <LayoutDashboard className="w-4 h-4" /> Admin Dashboard
+                    </>
+                  ) : (
+                    <>
+                      <LogIn className="w-4 h-4" /> Admin Login
+                    </>
+                  )}
+                </Link>
+              </li>
               <li className="pt-2 grid grid-cols-2 gap-2">
                 <a href={SITE.telHref} className="btn-secondary text-sm">
                   <Phone className="w-4 h-4" /> Call
                 </a>
-                <button onClick={() => go('search')} className="btn-primary text-sm">
-                  Check Challan
+                <button onClick={() => goSection('submit')} className="btn-primary text-sm">
+                  <Upload className="w-4 h-4" /> Submit
                 </button>
               </li>
             </ul>

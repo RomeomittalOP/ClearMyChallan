@@ -39,7 +39,8 @@ export default function Footer() {
             <FooterCol
               title="Product"
               links={[
-                ['Check Challan', '#search'],
+                ['Submit Case', '/#submit'],
+                ['Track Case', '/track'],
                 ['Pricing', '#pricing'],
                 ['How it Works', '#how'],
                 ['Data Safety', '#safety']

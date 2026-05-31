@@ -9,7 +9,7 @@ import {
 
 export const navLinks = [
   { id: 'home', label: 'Home' },
-  { id: 'search', label: 'Check Challan' },
+  { id: 'submit', label: 'Submit Case' },
   { id: 'pricing', label: 'Pricing' },
   { id: 'how', label: 'How it Works' },
   { id: 'safety', label: 'Data Safety' },
@@ -53,28 +53,28 @@ export const features = [
 export const steps = [
   {
     n: '01',
-    title: 'Enter Vehicle Number',
-    desc: 'Drop in your registration number to instantly fetch all pending challans.'
+    title: 'Upload RC & Challan',
+    desc: 'Drag-and-drop your Registration Certificate and Challan as JPG, PNG or PDF (max 20 MB each). Encrypted upload.'
   },
   {
     n: '02',
-    title: 'See Transparent Pricing',
-    desc: 'View the fine, the city-based resolution price and what you actually pay — upfront.'
+    title: 'Share Contact Details',
+    desc: 'Enter your full name, mobile number and email so our advocate can reach you with the quote and updates.'
   },
   {
     n: '03',
-    title: 'Pay a Flat Resolution Fee',
-    desc: 'Choose what you want resolved and pay one fixed, transparent amount.'
+    title: 'Advocate Reviews Within 24 Hours',
+    desc: 'A licensed advocate manually reviews your case and gets back to you with a transparent quoted price.'
   },
   {
     n: '04',
-    title: 'Advocate Handles It',
-    desc: 'A verified advocate is assigned and processes your case — no court visit needed.'
+    title: 'Pay the Quoted Price',
+    desc: 'Once you approve the quote, pay securely via UPI / card / netbanking. Status auto-updates to "Payment Received".'
   },
   {
     n: '05',
-    title: 'Disposed in 20–25 Days',
-    desc: 'Track progress to disposal. Not resolved in 25 days? Full refund.'
+    title: 'Case Processed & Disposed',
+    desc: 'Your assigned advocate handles the entire process — no court visit. Disposal in 20–25 days, or full refund.'
   }
 ]
 

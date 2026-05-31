@@ -91,7 +91,7 @@ export default function Pricing() {
               </ul>
 
               <button
-                onClick={() => go('search')}
+                onClick={() => go('submit')}
                 className="mt-5 btn-secondary w-full !py-2.5 text-sm group"
               >
                 Check my challan
