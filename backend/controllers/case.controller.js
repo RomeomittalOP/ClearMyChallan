@@ -11,9 +11,8 @@ const Payment = require('../models/Payment')
 // POST /api/cases/submit  (multipart: rc + challan + name/mobile/email)
 exports.submit = asyncHandler(async (req, res) => {
   const rcFile = req.files?.rc?.[0]
-  const challanFile = req.files?.challan?.[0]
+  const challanFile = req.files?.challan?.[0] // optional
   if (!rcFile) return fail(res, 'RC document is required', 400)
-  if (!challanFile) return fail(res, 'Challan document is required', 400)
 
   const doc = await caseService.submit({
     name: req.body.name,

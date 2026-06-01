@@ -37,7 +37,7 @@ function validateFile(file) {
   return null
 }
 
-function FileDropzone({ id, label, file, onFile, accept }) {
+function FileDropzone({ id, label, file, onFile, accept, optional = false }) {
   const inputRef = useRef(null)
   const [dragOver, setDragOver] = useState(false)
   const err = file ? validateFile(file) : null
@@ -59,6 +59,11 @@ function FileDropzone({ id, label, file, onFile, accept }) {
         className="block text-xs font-semibold uppercase tracking-wider text-ink-400 mb-2"
       >
         {label}
+        {optional && (
+          <span className="ml-1.5 normal-case font-normal text-ink-400/80 tracking-normal">
+            (optional)
+          </span>
+        )}
       </label>
       <div
         onDragOver={(e) => {
@@ -202,7 +207,7 @@ export default function SubmitCase() {
   const onSubmit = async (e) => {
     e.preventDefault()
     if (!rcFile) return toast.error('Please upload your RC document.')
-    if (!challanFile) return toast.error('Please upload your Challan document.')
+    // Challan upload is optional — advocate collects it during review if needed.
     if (!name.trim() || name.trim().length < 2)
       return toast.error('Please enter your full name.')
     if (!/^[6-9]\d{9}$/.test(mobile))
@@ -283,6 +288,7 @@ export default function SubmitCase() {
                 file={challanFile}
                 onFile={setChallanFile}
                 accept=".jpg,.jpeg,.png,.pdf"
+                optional
               />
             </div>
 

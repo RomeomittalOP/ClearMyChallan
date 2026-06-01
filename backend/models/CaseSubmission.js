@@ -42,7 +42,9 @@ const caseSubmissionSchema = new mongoose.Schema({
   vehicleNumber: { type: String, default: '', uppercase: true, trim: true, index: true },
   challanNumber: { type: String, default: '', trim: true, index: true },
   rc: { type: fileSubSchema, required: true },
-  challan: { type: fileSubSchema, required: true },
+  // Challan is optional — many users submit RC + details upfront, advocate
+  // collects challan separately via WhatsApp or sees it on Parivahan.
+  challan: { type: fileSubSchema, default: null },
   status: { type: String, enum: STATUS, default: 'Pending Review', index: true },
   quotedPrice: { type: Number, default: 0, min: 0 },
   advocateNotes: { type: [noteSubSchema], default: [] },

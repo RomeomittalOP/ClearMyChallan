@@ -22,7 +22,9 @@ async function submit({
   challanFile,
   user = null
 }) {
-  if (!rcFile || !challanFile) throw new ApiError('Both RC and Challan files are required', 400)
+  // RC is required. Challan is OPTIONAL — many users submit RC + details
+  // upfront and the advocate collects the challan via WhatsApp.
+  if (!rcFile) throw new ApiError('RC document is required', 400)
   if (mongoose.connection.readyState !== 1) {
     throw new ApiError('Service temporarily unavailable — database not connected', 503)
   }
@@ -30,20 +32,28 @@ async function submit({
   const caseId = await nextCaseId()
   let rcUploaded, challanUploaded
   try {
-    ;[rcUploaded, challanUploaded] = await Promise.all([
+    const uploads = [
       uploadBuffer(rcFile.buffer, {
         filename: rcFile.originalname,
         mimetype: rcFile.mimetype,
         folder: caseId,
         tag: 'rc'
-      }),
-      uploadBuffer(challanFile.buffer, {
-        filename: challanFile.originalname,
-        mimetype: challanFile.mimetype,
-        folder: caseId,
-        tag: 'challan'
       })
-    ])
+    ]
+    if (challanFile) {
+      uploads.push(
+        uploadBuffer(challanFile.buffer, {
+          filename: challanFile.originalname,
+          mimetype: challanFile.mimetype,
+          folder: caseId,
+          tag: 'challan'
+        })
+      )
+    }
+    const results = await Promise.all(uploads)
+    rcUploaded = results[0]
+    challanUploaded = results[1] || null
+
     const doc = await CaseSubmission.create({
       caseId,
       name,
@@ -53,7 +63,7 @@ async function submit({
       challanNumber: (challanNumber || '').trim(),
       user: user?._id || null,
       rc: rcUploaded,
-      challan: challanUploaded,
+      challan: challanUploaded || undefined,
       status: 'Pending Review',
       statusHistory: [{ status: 'Pending Review', by: user?._id || null }]
     })
