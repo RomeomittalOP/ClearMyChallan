@@ -37,4 +37,15 @@ const payVerify = [
   body('signature').isString().notEmpty()
 ]
 
-module.exports = { submit, track, update, payCreate, payVerify }
+// UPI manual payment proof — customer submits UTR after scanning the QR.
+const paymentProof = [
+  caseIdParam,
+  body('utr')
+    .isString()
+    .trim()
+    .matches(/^\d{6,22}$/)
+    .withMessage('UTR must be a 6–22 digit number'),
+  body('note').optional({ checkFalsy: true }).isString().isLength({ max: 500 })
+]
+
+module.exports = { submit, track, update, payCreate, payVerify, paymentProof }

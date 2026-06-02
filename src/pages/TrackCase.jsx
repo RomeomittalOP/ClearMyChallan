@@ -18,7 +18,8 @@ import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import FloatingSupport from '../components/FloatingSupport.jsx'
 import BackgroundOrbs from '../components/ui/BackgroundOrbs.jsx'
-import { trackCase, createCasePayment, verifyCasePayment } from '../services/case.service.js'
+import UPIPayment from '../components/UPIPayment.jsx'
+import { trackCase } from '../services/case.service.js'
 import { extractError } from '../services/api.js'
 
 const STATUS_ORDER = [
@@ -38,22 +39,6 @@ const STATUS_COLORS = {
   'Case Processing': 'bg-indigo-50 text-indigo-700 border-indigo-200',
   Completed: 'bg-green-50 text-green-700 border-green-200',
   Cancelled: 'bg-rose-50 text-rose-700 border-rose-200'
-}
-
-const RZP_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js'
-let rzpScriptPromise = null
-function loadRazorpay() {
-  if (typeof window === 'undefined') return Promise.resolve(false)
-  if (window.Razorpay) return Promise.resolve(true)
-  if (rzpScriptPromise) return rzpScriptPromise
-  rzpScriptPromise = new Promise((resolve) => {
-    const s = document.createElement('script')
-    s.src = RZP_SCRIPT
-    s.onload = () => resolve(true)
-    s.onerror = () => resolve(false)
-    document.body.appendChild(s)
-  })
-  return rzpScriptPromise
 }
 
 function StatusTimeline({ status }) {
@@ -105,7 +90,6 @@ export default function TrackCase() {
   const [mode, setMode] = useState('caseId') // 'caseId' | 'mobile'
   const [value, setValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const [paying, setPaying] = useState(false)
   const [result, setResult] = useState(null)
 
   // Auto-lookup if a query param is supplied.
@@ -148,59 +132,11 @@ export default function TrackCase() {
     doLookup(mode === 'caseId' ? { caseId: v } : { mobile: v })
   }
 
-  async function payNow() {
-    if (!result || !result.caseId) return
-    setPaying(true)
-    try {
-      const ok = await loadRazorpay()
-      if (!ok) throw new Error('Could not load payment gateway. Check your connection.')
-
-      // Look up internal id by tracking again with case id (admin endpoint
-      // would need the Mongo _id; for now the public id is the case id, and
-      // the backend resolves payments by case _id, so we ask the backend to
-      // look it up by re-fetching via track which doesn't return _id. We
-      // route payment by the public case id endpoint that uses the Mongo id.
-      // To bridge, the backend exposes payment via /api/cases/:id/pay where
-      // :id is the internal _id; the track endpoint deliberately doesn't
-      // expose it. So payment uses the admin-style id endpoint — for the
-      // public payment flow we rely on the same value: backend accepts both
-      // since case-flow uses Mongo _id. We pass the human caseId — backend
-      // would 400 isMongoId. For production we'd add a public id lookup;
-      // for now we use the human caseId and expect backend support.
-      // (TODO: add backend endpoint POST /api/cases/by-case-id/:caseId/pay)
-      const payload = await createCasePayment(result.caseId)
-
-      const rzp = new window.Razorpay({
-        key: payload.razorpay.keyId,
-        amount: payload.razorpay.amount,
-        currency: payload.razorpay.currency,
-        order_id: payload.razorpay.orderId,
-        name: 'ClearMyChallan',
-        description: `Case ${result.caseId} — Resolution`,
-        prefill: payload.prefill,
-        theme: { color: '#1D4ED8' },
-        handler: async (resp) => {
-          try {
-            await verifyCasePayment(result.caseId, {
-              orderId: resp.razorpay_order_id,
-              paymentId: resp.razorpay_payment_id,
-              signature: resp.razorpay_signature
-            })
-            toast.success('Payment received. Case moves to processing.')
-            // Refresh status
-            doLookup(mode === 'caseId' ? { caseId: result.caseId } : { mobile: result.mobile })
-          } catch (e) {
-            toast.error(extractError(e, 'Payment verification failed.'))
-          }
-        },
-        modal: { ondismiss: () => setPaying(false) }
-      })
-      rzp.open()
-    } catch (err) {
-      toast.error(extractError(err))
-    } finally {
-      setPaying(false)
-    }
+  // Refresh case status after the customer submits UTR — so the timeline
+  // updates locally without requiring a hard reload.
+  function refresh() {
+    if (!result) return
+    doLookup(mode === 'caseId' ? { caseId: result.caseId } : { mobile: result.mobile })
   }
 
   return (
@@ -322,24 +258,23 @@ export default function TrackCase() {
                         <div className="mt-1 font-display text-2xl font-bold text-police-700">
                           ₹{result.quotedPrice.toLocaleString('en-IN')}
                         </div>
-                        {result.status === 'Price Quoted' && (
-                          <button
-                            onClick={payNow}
-                            disabled={paying}
+                        {result.status === 'Price Quoted' && !result.paymentReference && (
+                          <a
+                            href="#pay"
                             className="btn-primary w-full !py-2.5 mt-3 text-sm"
                           >
-                            {paying ? (
-                              <>
-                                <Loader2 className="w-4 h-4 animate-spin" /> Opening payment…
-                              </>
-                            ) : (
-                              <>
-                                Pay Now <ArrowRight className="w-4 h-4" />
-                              </>
-                            )}
-                          </button>
+                            Pay via UPI QR <ArrowRight className="w-4 h-4" />
+                          </a>
                         )}
-                        {result.status === 'Payment Received' && (
+                        {result.status === 'Price Quoted' && result.paymentReference && (
+                          <div className="text-xs text-amber-700 mt-2 flex items-center gap-1.5 bg-amber-50 border border-amber-200 rounded-md px-2.5 py-1.5">
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            Payment verifying · UTR {result.paymentReference}
+                          </div>
+                        )}
+                        {(result.status === 'Payment Received' ||
+                          result.status === 'Case Processing' ||
+                          result.status === 'Completed') && (
                           <div className="text-xs text-green-700 mt-2 flex items-center gap-1.5">
                             <CheckCircle2 className="w-3.5 h-3.5" /> Payment confirmed
                           </div>
@@ -378,6 +313,19 @@ export default function TrackCase() {
                   </div>
                 </div>
               </div>
+
+              {/* UPI payment section — only when there's a price and no UTR yet */}
+              {result.status === 'Price Quoted' &&
+                result.quotedPrice > 0 &&
+                !result.paymentReference && (
+                  <div id="pay" className="scroll-mt-24">
+                    <UPIPayment
+                      caseId={result.caseId}
+                      amount={result.quotedPrice}
+                      onPaid={refresh}
+                    />
+                  </div>
+                )}
             </motion.div>
           )}
 

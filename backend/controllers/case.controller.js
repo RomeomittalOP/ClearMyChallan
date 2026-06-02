@@ -47,6 +47,35 @@ exports.track = asyncHandler(async (req, res) => {
   return success(res, data, 'Case found')
 })
 
+// GET /api/cases/upi-config — public; the track page reads this to render the QR.
+exports.upiConfig = asyncHandler(async (_req, res) => {
+  return success(res, {
+    configured: !!config.upi.id,
+    upiId: config.upi.id || '',
+    payeeName: config.upi.payeeName || 'ClearMyChallan'
+  })
+})
+
+// POST /api/cases/:id/payment-proof  { utr, note? }
+// Customer-side: after scanning the QR and paying, they paste UTR here.
+exports.submitPaymentProof = asyncHandler(async (req, res) => {
+  const doc = await caseService.submitPaymentProof({
+    idOrCaseId: req.params.id,
+    utr: req.body.utr,
+    note: req.body.note
+  })
+  return success(
+    res,
+    {
+      caseId: doc.caseId,
+      status: doc.status,
+      paymentReference: doc.paymentReference,
+      paymentSubmittedAt: doc.paymentSubmittedAt
+    },
+    'Payment details submitted. Our advocate will verify and confirm shortly.'
+  )
+})
+
 // POST /api/cases/:id/pay  →  Razorpay order
 // :id can be a Mongo _id or the human caseId (CMC-YYYY-NNNNNN).
 exports.createPayment = asyncHandler(async (req, res) => {

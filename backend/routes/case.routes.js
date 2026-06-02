@@ -37,6 +37,16 @@ router.post(
 
 router.get('/track', trackLimiter, validate(v.track), ctrl.track)
 
+// UPI direct-QR payment (primary)
+router.get('/upi-config', ctrl.upiConfig)
+router.post(
+  '/:id/payment-proof',
+  trackLimiter,
+  validate(v.paymentProof),
+  ctrl.submitPaymentProof
+)
+
+// Razorpay (optional / backup gateway)
 router.post('/:id/pay', trackLimiter, validate(v.payCreate), ctrl.createPayment)
 router.post('/:id/verify', trackLimiter, validate(v.payVerify), ctrl.verifyPayment)
 

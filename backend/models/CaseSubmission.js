@@ -52,6 +52,10 @@ const caseSubmissionSchema = new mongoose.Schema({
   assignedAdvocate: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment', default: null },
   paidAt: { type: Date, default: null },
+  // UPI manual payment — customer submits UTR after scanning the QR
+  paymentReference: { type: String, default: '', trim: true, index: true },
+  paymentNote: { type: String, default: '', trim: true, maxlength: 500 },
+  paymentSubmittedAt: { type: Date, default: null },
   notifiedAdmin: { type: Boolean, default: false },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }
 }, { timestamps: true })

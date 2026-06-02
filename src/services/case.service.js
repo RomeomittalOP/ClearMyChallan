@@ -36,7 +36,19 @@ export async function trackCase({ mobile, caseId }) {
   return data.data
 }
 
-// Public: kick off Razorpay payment for a case
+// Public: UPI config (cloud_name etc. for QR rendering on the track page)
+export async function getUpiConfig() {
+  const { data } = await api.get('/cases/upi-config')
+  return data.data
+}
+
+// Public: customer submits UTR after paying via UPI QR
+export async function submitPaymentProof(caseId, { utr, note }) {
+  const { data } = await api.post(`/cases/${caseId}/payment-proof`, { utr, note })
+  return data.data
+}
+
+// Public: kick off Razorpay payment for a case (kept as backup gateway path)
 export async function createCasePayment(caseId) {
   const { data } = await api.post(`/cases/${caseId}/pay`)
   return data.data

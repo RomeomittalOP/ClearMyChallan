@@ -96,9 +96,41 @@ async function track({ mobile, caseId }) {
     statusHistory: doc.statusHistory.map((s) => ({ status: s.status, at: s.at })),
     assignedAdvocate: doc.assignedAdvocate?.name || null,
     paidAt: doc.paidAt,
+    paymentReference: doc.paymentReference || '',
+    paymentSubmittedAt: doc.paymentSubmittedAt,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt
   }
+}
+
+// Public: customer submits UTR after paying via UPI QR.
+// Resolves case by Mongo _id OR human caseId (CMC-YYYY-NNNNNN).
+async function submitPaymentProof({ idOrCaseId, utr, note }) {
+  if (!utr || !/^\d{6,22}$/.test(String(utr).trim())) {
+    throw new ApiError('Valid UPI transaction reference (UTR) is required', 400)
+  }
+  const doc = await findByIdOrCaseId(idOrCaseId)
+  if (doc.status === 'Payment Received' || doc.status === 'Completed') {
+    throw new ApiError('This case is already paid for', 409)
+  }
+  if (!doc.quotedPrice || doc.quotedPrice <= 0) {
+    throw new ApiError('No quoted price set yet on this case', 400)
+  }
+
+  doc.paymentReference = String(utr).trim()
+  doc.paymentNote = (note || '').trim().slice(0, 500)
+  doc.paymentSubmittedAt = new Date()
+  // System note so admin sees it inline with their advocate notes timeline.
+  doc.advocateNotes.push({
+    author: null,
+    authorName: 'System',
+    message: `Customer submitted payment. UTR: ${doc.paymentReference}${
+      doc.paymentNote ? ` · Note: ${doc.paymentNote}` : ''
+    }`
+  })
+  await doc.save()
+  notifyStatusChange(doc, doc.status).catch(() => {}) // ping admin
+  return doc
 }
 
 async function adminList({ search, status, page = 1, limit = 25 } = {}) {
@@ -230,5 +262,6 @@ module.exports = {
   adminSummary,
   markPaid,
   nextCaseId,
-  findByIdOrCaseId
+  findByIdOrCaseId,
+  submitPaymentProof
 }

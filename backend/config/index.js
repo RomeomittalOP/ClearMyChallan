@@ -34,6 +34,11 @@ const config = {
     apiKey: required('CHALLAN_API_KEY', '')
   },
 
+  upi: {
+    id: required('UPI_ID', ''),
+    payeeName: required('UPI_PAYEE_NAME', 'ClearMyChallan')
+  },
+
   razorpay: {
     keyId: required('RAZORPAY_KEY_ID', ''),
     keySecret: required('RAZORPAY_KEY_SECRET', ''),
@@ -83,5 +88,6 @@ config.cloudinaryConfigured = Boolean(
     config.cloudinary.apiKey &&
     config.cloudinary.apiSecret
 )
+config.upiConfigured = Boolean(config.upi.id)
 
 module.exports = config
